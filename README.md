@@ -1,2 +1,2 @@
-# public-api-requests
-Treehouse Techdegree Project 5
+# Public API Requests
+This is Project 5 of the Treehouse Techdegree.
