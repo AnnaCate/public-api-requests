@@ -1,6 +1,9 @@
 const randomUserUrl = 'https://randomuser.me/api/?results=12&nat=us';
 const body = document.querySelector('body');
 const gallery = document.getElementById('gallery');
+// ⚠️ need to define an empty array to hold the list of active employees
+// update list in getUser fn
+// use the user's index in the array for the modal window
 
 // Handle all fetch requests
 async function getJSON(url) {
@@ -55,65 +58,55 @@ function generateHTML(data) {
         <h3 id="name" class="card-name cap">${person.name}</h3>
         <p class="card-text">${person.email}</p>
         <p class="card-text cap">${person.city}</p>
-        <p style="display:none">${person.phone}</p>
-        <p style="display:none">${person.address}</p>
-        <p style="display:none">${person.birthday.getMonth()}/${person.birthday.getDay()}/${person.birthday.getYear()}</p>
         `;
     });
-  }
+
+    addEventListenerList(getCards());
+}
 
 function generateModal(data) {
-    // create modal container and modal
-    const modalContainer = document.createElement('div');
-    modalContainer.classList.add('modal-container');
-    gallery.parentNode.insertBefore(modalContainer, gallery.nextSibling);
+    data.map(person => {
 
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-    modalContainer.appendChild(modal);
+        // create modal container and modal
+        const modalContainer = document.createElement('div');
+        modalContainer.classList.add('modal-container');
+        gallery.parentNode.insertBefore(modalContainer, gallery.nextSibling);
 
-    // create button
-    const btn = document.createElement('button');
-    btn.setAttribute('type', 'button');
-    btn.setAttribute('id', 'modal-close-btn');
-    btn.setAttribute('class', 'modal-close-btn');
-    btn.innerHTML = '<strong>X</strong>';
-    modal.appendChild(btn);
-    // ADD EVENT LISTENER TO BUTTON
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+        modalContainer.appendChild(modal);
 
-    // create info container
-    const modalInfo = document.createElement('div');
-    modalInfo.classList.add('modal-info-container');
-    modal.appendChild(modalInfo);
-    // get info that we'll need
-    // REFACTOR THIS
-    // FORMAT ADDRESS & PHONE
-    const modalImg = this.firstElementChild.firstElementChild.src;
-    const modalName = this.lastChild.firstElementChild.textContent;
-    const modalEmail = this.lastChild.firstElementChild.nextElementSibling.textContent;
-    const modalCity = this.lastChild.firstElementChild.nextElementSibling.nextElementSibling.textContent;
-    const modalPhone = this.lastChild.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
-    const modalLoc = this.lastChild.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
-    const modalDob = this.lastChild.lastElementChild.textContent;
-    // const modalDobMonth = modalDob.getMonth( );
-    modalInfo.innerHTML = `<img class="modal-img" 
-        src=${modalImg} alt="profile picture">
-        <h3 id="name" class="modal-name cap">${modalName}</h3>
-        <p class="modal-text">${modalEmail}</p>
-        <p class="modal-text cap">${modalCity}</p>
-        <hr>
-        <p class="modal-text">${modalPhone}</p>
-        <p class="modal-text">${modalLoc}</p>
-        <p class="modal-text">Birthday: ${modalDob}</p>
-    `;
+        // create button
+        const btn = document.createElement('button');
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('id', 'modal-close-btn');
+        btn.setAttribute('class', 'modal-close-btn');
+        btn.innerHTML = '<strong>X</strong>';
+        modal.appendChild(btn);
+        // ADD EVENT LISTENER TO BUTTON
+
+        // create info container
+        const modalInfo = document.createElement('div');
+        modalInfo.classList.add('modal-info-container');
+        modal.appendChild(modalInfo);
+        // get info that we'll need
+        modalInfo.innerHTML = `<img class="modal-img" 
+            src=${person.img} alt="profile picture">
+            <h3 id="name" class="modal-name cap">${person.name}</h3>
+            <p class="modal-text">${person.email}</p>
+            <p class="modal-text cap">${person.city}</p>
+            <hr>
+            <p class="modal-text">${person.phone}</p>
+            <p class="modal-text">${person.address}</p>
+            <p class="modal-text">Birthday: ${person.birthday.getMonth()}/${person.birthday.getDay()}/${person.birthday.getYear()}/p>
+        `;
+    });
 }
 
 // on page load, fetch the users and put them on the page
 document.addEventListener('DOMContentLoaded', () => {
     getUser(randomUserUrl)
         .then(generateHTML)
-        .then(getCards)
-        .then(addEventListenerList)
         .catch(e => {
             gallery.innerHTML = '<h3>Something went wrong!</h3>';
             console.error(e);
@@ -129,6 +122,6 @@ function getCards() {
 // add event listeners to nodelist
 function addEventListenerList(list) {
     for (let i = 0; i < list.length; i++) {
-        list[i].addEventListener('click', generateModal, false);
+        list[i].addEventListener('click', generateModal(data), false);
     }
 }
