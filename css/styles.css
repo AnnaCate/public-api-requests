@@ -94,18 +94,25 @@ header h1 {
     overflow: hidden;
 }
 
+.card-img-container {
+    pointer-events: none;
+}
+
 .card-img {
     width: 95px;
     margin: 10px 15px auto 10px;
     border-radius: 50%;
+    pointer-events: none;
 }
 
 .card-info-container {
     text-align: left;
+    pointer-events: none;
 }
 
 .card-name {
     margin: 20px auto 0;
+    pointer-events: none;
 }
 
 .card-text {
@@ -113,6 +120,7 @@ header h1 {
     color: rgba(50, 50, 50, 0.7);
     margin: 7px auto;
     transition: .4s ease-out;
+    pointer-events: none;
 }
 
 .cap {
